@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 2.2 Core Schema - Users
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
+  projectMembers ProjectMember[]
+  tasks         Task[]          @relation("AssignedUser")
+  messages      Message[]
+  files         File[]
+  comments      TaskComment[]
+
+  @@index([email])
+}
+
+model Account {
+  id                 String  @id @default(uuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// 2.3 Core Schema - Projects
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  userId      String
+  status      ProjectStatus @default(draft)
+  visibility  Visibility    @default(private)
+  techStack   Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        User     @relation(fields: [userId], references: [id])
+  settings    ProjectSettings?
+  members     ProjectMember[]
+  tasks       Task[]
+  messages    Message[]
+  files       File[]
+  agentActivity AgentActivity[]
+}
+
+model ProjectSettings {
+  id        String  @id @default(uuid())
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  config    Json?
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  projectId String
+  userId    String
+  role      String   @default("member")
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+}
+
+// 2.4 Core Schema - Tasks
+model Task {
+  id               String   @id @default(uuid())
+  projectId        String
+  parentId         String?
+  title            String
+  description      String?
+  status           TaskStatus @default(pending)
+  priority         Priority   @default(medium)
+  assignedAgent    AgentType?
+  assignedUserId   String?
+  estimatedMinutes Int?
+  actualMinutes    Int?
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  completedAt      DateTime?
+
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parent       Task?     @relation("SubTasks", fields: [parentId], references: [id])
+  subTasks     Task[]    @relation("SubTasks")
+  assignedUser User?     @relation("AssignedUser", fields: [assignedUserId], references: [id])
+  comments     TaskComment[]
+  dependencies TaskDependency[] @relation("TaskDependencies")
+  dependents   TaskDependency[] @relation("TaskDependents")
+  agentActivity AgentActivity[]
+}
+
+model TaskDependency {
+  id          String @id @default(uuid())
+  taskId      String
+  dependsOnId String
+  
+  task        Task   @relation("TaskDependencies", fields: [taskId], references: [id])
+  dependsOn   Task   @relation("TaskDependents", fields: [dependsOnId], references: [id])
+
+  @@unique([taskId, dependsOnId])
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// 2.5 Core Schema - Messages
+model Message {
+  id          String   @id @default(uuid())
+  projectId   String
+  threadId    String?
+  senderType  SenderType
+  senderId    String   // Agent Type or User ID
+  messageType String   @default("text") // text, code, api_contract
+  content     String   @db.Text
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User?     @relation(fields: [senderId], references: [id], map: "Message_User_Sender")
+  reactions   MessageReaction[]
+  attachments MessageAttachment[]
+}
+
+model MessageReaction {
+  id        String   @id @default(uuid())
+  messageId String
+  userId    String
+  emoji     String
+  
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model MessageAttachment {
+  id        String   @id @default(uuid())
+  messageId String
+  fileId    String
+  
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+// 2.6 Core Schema - Files
+model File {
+  id             String    @id @default(uuid())
+  projectId      String
+  path           String
+  name           String
+  extension      String
+  content        String?   @db.Text
+  size           Int       @default(0)
+  mimeType       String?
+  lastModifiedBy String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  project        Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user           User?         @relation(fields: [lastModifiedBy], references: [id])
+  versions       FileVersion[]
+
+  @@unique([projectId, path])
+}
+
+model FileVersion {
+  id        String   @id @default(uuid())
+  fileId    String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  file      File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+}
+
+// 2.7 Core Schema - Agent Activity
+model AgentActivity {
+  id           String      @id @default(uuid())
+  projectId    String
+  agentType    AgentType
+  taskId       String?
+  activityType String      // started, working, completed, error, paused
+  description  String
+  metadata     Json?
+  createdAt    DateTime    @default(now())
+
+  project      Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  task         Task?       @relation(fields: [taskId], references: [id])
+}
+
+model AgentState {
+  id        String    @id @default(uuid())
+  agentType AgentType @unique
+  status    String    // idle, working, paused
+  currentTaskId String?
+  updatedAt DateTime  @updatedAt
+}
+
+// Enums
+enum ProjectStatus {
+  draft
+  active
+  paused
+  completed
+  archived
+}
+
+enum Visibility {
+  private
+  team
+  public
+}
+
+enum TaskStatus {
+  pending
+  in_progress
+  review
+  blocked
+  completed
+  cancelled
+}
+
+enum Priority {
+  low
+  medium
+  high
+  critical
+}
+
+enum AgentType {
+  pm
+  frontend
+  backend
+  database
+  security
+  testing
+  devops
+  ml
+}
+
+enum SenderType {
+  user
+  agent
+  system
+}

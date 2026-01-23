@@ -1,0 +1,13 @@
+{
+  "name": "@devteam/shared",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.ts",
+  "types": "index.ts",
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@devteam/ts-config": "workspace:*"
+  }
+}
