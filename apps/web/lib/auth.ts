@@ -1,11 +1,11 @@
-import { NextAuthOptions } from 'next-auth';
+
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import { db } from '@devteam/database';
 import * as bcrypt from 'bcryptjs';
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   adapter: PrismaAdapter(db) as any, // Type mismatch workaround between NextAuth v4 and @auth/prisma-adapter
   session: {
     strategy: 'jwt',
@@ -58,13 +58,13 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ token, session }) {
+    async session({ token, session }: { token: any; session: any }) {
       if (token && session.user) {
         session.user.id = token.id as string;
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.id = user.id;
       }

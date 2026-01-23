@@ -4,102 +4,138 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@devteam/ui/components/button';
 import { Input } from '@devteam/ui/components/input';
+import { Label } from '@devteam/ui/components/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@devteam/ui/components/card';
+import { Github } from 'lucide-react';
+import { signIn } from 'next-auth/react';
 
 export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     setError(null);
 
-    const email = e.currentTarget.email.value;
-    const password = e.currentTarget.password.value;
-    const name = e.currentTarget.name.value;
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const name = formData.get('name') as string;
 
-    const res = await fetch('/api/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, name }),
-    });
+    try {
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name }),
+      });
 
-    if (res.ok) {
-      router.push('/login');
-    } else {
-      const data = await res.json();
-      setError(data.message || 'Something went wrong');
+      if (res.ok) {
+        router.push('/login?registered=true');
+      } else {
+        const data = await res.json();
+        setError(data.message || 'Something went wrong');
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-zinc-900">
-      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-10 shadow-lg dark:bg-zinc-800">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
-            Create an account
-          </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Already have an account?{' '}
-            <a href="/login" className="text-indigo-600 hover:text-indigo-500">
-              Sign in
-            </a>
-          </p>
-        </div>
-
-        {error && (
-          <div className="rounded-md bg-red-50 p-4 text-sm text-red-500 dark:bg-red-900/30">
-            {error}
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-zinc-900 px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+          <CardDescription>
+            Enter your email below to create your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="grid grid-cols-1 gap-6">
+            <Button
+              variant="outline"
+              onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
+            >
+              <Github className="mr-2 h-4 w-4" />
+              Github
+            </Button>
           </div>
-        )}
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="-space-y-px space-y-4 rounded-md shadow-sm">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Full Name
-              </label>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            {error && (
+              <div className="text-sm text-red-500 font-medium">
+                {error}
+              </div>
+            )}
+            <div className="grid gap-2">
+              <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
                 name="name"
+                placeholder="John Doe"
                 type="text"
                 required
-                placeholder="Full Name"
+                disabled={loading}
               />
             </div>
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="email-address"
+                id="email"
                 name="email"
                 type="email"
+                placeholder="m@example.com"
                 required
-                placeholder="Email address"
+                disabled={loading}
               />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 name="password"
                 type="password"
                 required
-                placeholder="Password (min 6 chars)"
                 minLength={6}
+                disabled={loading}
               />
             </div>
-          </div>
-
-          <div>
-            <Button type="submit" className="w-full">
-              Sign up
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Creating account...' : 'Create account'}
             </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-wrap items-center justify-between gap-2">
+          <div className="text-sm text-muted-foreground">
+            <span className="mr-1">Already have an account?</span>
+            <a
+              href="/login"
+              className="font-medium text-primary hover:underline"
+            >
+              Sign in
+            </a>
           </div>
-        </form>
-      </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
