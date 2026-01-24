@@ -467,27 +467,27 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 4.7 Layout Components
 
-- [ ] MainLayout component:
-  - [ ] Header with navigation
-  - [ ] Sidebar
-  - [ ] Main content area
-  - [ ] Resizable panels
-- [ ] Header component:
-  - [ ] Logo
-  - [ ] Project selector
-  - [ ] Command palette trigger
-  - [ ] Notifications
-  - [ ] User menu
-- [ ] Sidebar component:
-  - [ ] Navigation icons
-  - [ ] Tooltip labels
-  - [ ] Active state
-- [ ] ResizablePanel component:
-  - [ ] Drag handle
-  - [ ] Min/max constraints
-  - [ ] Collapse support
-- [ ] PageHeader component
-- [ ] EmptyState component
+- [x] MainLayout component:
+  - [x] Header with navigation
+  - [x] Sidebar
+  - [x] Main content area
+  - [x] Resizable panels
+- [x] Header component:
+  - [x] Logo
+  - [x] Project selector
+  - [x] Command palette trigger
+  - [x] Notifications
+  - [x] User menu
+- [x] Sidebar component:
+  - [x] Navigation icons
+  - [x] Tooltip labels
+  - [x] Active state
+- [x] ResizablePanel component:
+  - [x] Drag handle
+  - [x] Min/max constraints
+  - [x] Collapse support
+- [x] PageHeader component
+- [x] EmptyState component
 
 ### 4.8 State Management
 

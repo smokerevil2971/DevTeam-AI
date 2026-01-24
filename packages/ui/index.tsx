@@ -46,5 +46,13 @@ export * from './components/editor-pane';
 export * from './components/terminal';
 export * from './components/code-block';
 
+// Layout components
+export * from './components/main-layout';
+export * from './components/header';
+export * from './components/sidebar';
+export * from './components/resizable-panel';
+export * from './components/page-header';
+export * from './components/empty-state';
+
 // Utilities
 export * from './lib/utils';
