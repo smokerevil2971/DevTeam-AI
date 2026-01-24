@@ -32,5 +32,12 @@ export * from './components/agent-status-card';
 export * from './components/agent-activity-feed';
 export * from './components/agent-selector';
 
+// Communication components
+export * from './components/message-bubble';
+export * from './components/message-input';
+export * from './components/message-thread';
+export * from './components/mention-dropdown';
+export * from './components/command-palette';
+
 // Utilities
 export * from './lib/utils';

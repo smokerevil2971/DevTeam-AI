@@ -406,28 +406,30 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 4.5 Communication Components
 
-- [ ] MessageBubble component:
-  - [ ] User message (right-aligned)
-  - [ ] Agent message (left-aligned with avatar)
-  - [ ] System message (centered)
-  - [ ] Code block support
-  - [ ] Timestamp display
-- [ ] MessageInput component:
-  - [ ] Auto-resize textarea
-  - [ ] @ mention support
-  - [ ] / command support
-  - [ ] File attachment
-  - [ ] Send button
-  - [ ] Keyboard shortcuts
-- [ ] MessageThread component:
-  - [ ] Message list with virtualization
-  - [ ] Auto-scroll to bottom
-  - [ ] Load more (scroll up)
-  - [ ] Typing indicators
-- [ ] MentionDropdown component
-- [ ] CommandPalette component (⌘K):
-  - [ ] Search input
-  - [ ] Categorized results
+- [x] MessageBubble component:
+  - [x] User message (right-aligned)
+  - [x] Agent message (left-aligned with avatar)
+  - [x] System message (centered)
+  - [x] Code block support
+  - [x] Timestamp display
+- [x] MessageInput component:
+  - [x] Auto-resize textarea
+  - [x] @ mention support
+  - [x] / command support
+  - [x] File attachment
+  - [x] Send button
+  - [x] Keyboard shortcuts
+- [x] MessageThread component:
+  - [x] Message list with virtualization
+  - [x] Auto-scroll to bottom
+  - [x] Load more (scroll up)
+  - [x] Typing indicators
+- [x] MentionDropdown component
+- [x] CommandPalette component (⌘K):
+  - [x] Search input
+  - [x] Categorized results
+  - [x] Keyboard navigation
+  - [x] Actions history
   - [ ] Keyboard navigation
   - [ ] Recent items
 
