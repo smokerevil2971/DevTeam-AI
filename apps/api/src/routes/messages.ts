@@ -28,10 +28,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     const project = await db.project.findFirst({
       where: {
         id: projectId,
-        OR: [
-          { userId },
-          { members: { some: { userId } } },
-        ],
+        OR: [{ userId }, { members: { some: { userId } } }],
       },
     });
 
@@ -88,10 +85,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     const project = await db.project.findFirst({
       where: {
         id: projectId,
-        OR: [
-          { userId },
-          { members: { some: { userId } } },
-        ],
+        OR: [{ userId }, { members: { some: { userId } } }],
       },
     });
 
@@ -158,10 +152,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     const project = await db.project.findFirst({
       where: {
         id: projectId,
-        OR: [
-          { userId },
-          { members: { some: { userId } } },
-        ],
+        OR: [{ userId }, { members: { some: { userId } } }],
       },
     });
 
@@ -182,38 +173,44 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     // Get the first message of each thread for preview
     const threadPreviews = await Promise.all(
-      threads.map(async (thread) => {
-        const firstMessage = await db.message.findFirst({
-          where: { projectId, threadId: thread.threadId },
-          orderBy: { createdAt: 'asc' },
-          select: {
-            id: true,
-            content: true,
-            senderType: true,
-            senderId: true,
-            createdAt: true,
-            user: { select: { id: true, name: true, image: true } },
-          },
-        });
+      threads.map(
+        async (thread: {
+          threadId: string | null;
+          _count: { id: number };
+          _max: { createdAt: Date | null };
+        }) => {
+          const firstMessage = await db.message.findFirst({
+            where: { projectId, threadId: thread.threadId },
+            orderBy: { createdAt: 'asc' },
+            select: {
+              id: true,
+              content: true,
+              senderType: true,
+              senderId: true,
+              createdAt: true,
+              user: { select: { id: true, name: true, image: true } },
+            },
+          });
 
-        const lastMessage = await db.message.findFirst({
-          where: { projectId, threadId: thread.threadId },
-          orderBy: { createdAt: 'desc' },
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-          },
-        });
+          const lastMessage = await db.message.findFirst({
+            where: { projectId, threadId: thread.threadId },
+            orderBy: { createdAt: 'desc' },
+            select: {
+              id: true,
+              content: true,
+              createdAt: true,
+            },
+          });
 
-        return {
-          threadId: thread.threadId,
-          messageCount: thread._count.id,
-          lastActivityAt: thread._max.createdAt,
-          firstMessage,
-          lastMessage,
-        };
-      })
+          return {
+            threadId: thread.threadId,
+            messageCount: thread._count.id,
+            lastActivityAt: thread._max.createdAt,
+            firstMessage,
+            lastMessage,
+          };
+        },
+      ),
     );
 
     // Sort by last activity
@@ -234,7 +231,9 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     Params: { id: string; msgId: string };
     Body: unknown;
   }>('/:msgId/reactions', async (request, reply) => {
-    const { id: projectId, msgId: messageId } = MessageIdParamSchema.parse(request.params);
+    const { id: projectId, msgId: messageId } = MessageIdParamSchema.parse(
+      request.params,
+    );
     const { emoji } = AddReactionSchema.parse(request.body);
     const userId = request.user!.id;
 
@@ -242,10 +241,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     const project = await db.project.findFirst({
       where: {
         id: projectId,
-        OR: [
-          { userId },
-          { members: { some: { userId } } },
-        ],
+        OR: [{ userId }, { members: { some: { userId } } }],
       },
     });
 
@@ -301,10 +297,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     const project = await db.project.findFirst({
       where: {
         id: projectId,
-        OR: [
-          { userId },
-          { members: { some: { userId } } },
-        ],
+        OR: [{ userId }, { members: { some: { userId } } }],
       },
     });
 
