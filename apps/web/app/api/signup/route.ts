@@ -12,6 +12,8 @@ const signupSchema = z.object({
 export async function POST(req: Request) {
   try {
     const json = await req.json();
+    console.log('Signup attempt:', { email: json.email });
+
     const body = signupSchema.parse(json);
 
     const existingUser = await db.user.findUnique({
@@ -19,6 +21,7 @@ export async function POST(req: Request) {
     });
 
     if (existingUser) {
+      console.log('User already exists:', body.email);
       return NextResponse.json(
         { message: 'User with this email already exists' },
         { status: 409 },
@@ -35,17 +38,21 @@ export async function POST(req: Request) {
       },
     });
 
+    console.log('User created:', user.id);
     return NextResponse.json(
       { user: { id: user.id, email: user.email, name: user.name } },
       { status: 201 },
     );
   } catch (error) {
+    console.error('Signup error:', error);
+
     if (error instanceof z.ZodError) {
       return NextResponse.json({ message: error.errors }, { status: 400 });
     }
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 },
-    );
+
+    // Return more detailed error in development
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }

@@ -386,23 +386,23 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 4.4 Agent-Specific Components
 
-- [ ] AgentAvatar component:
-  - [ ] All 8 agent types
-  - [ ] Size variants (sm, md, lg)
-  - [ ] Status indicator (active, idle, error)
-  - [ ] Tooltip with agent info
-- [ ] AgentStatusCard component:
-  - [ ] Current task display
-  - [ ] Progress indicator
-  - [ ] Recent activity
-  - [ ] Action buttons (pause, guide)
-- [ ] AgentActivityFeed component:
-  - [ ] Real-time updates
-  - [ ] Grouped by agent
-  - [ ] Timestamp display
-- [ ] AgentSelector component:
-  - [ ] For mentions in messages
-  - [ ] Keyboard navigation
+- [x] AgentAvatar component:
+  - [x] All 8 agent types
+  - [x] Size variants (sm, md, lg)
+  - [x] Status indicator (active, idle, error)
+  - [x] Tooltip with agent info
+- [x] AgentStatusCard component:
+  - [x] Current task display
+  - [x] Progress indicator
+  - [x] Recent activity
+  - [x] Action buttons (pause, guide)
+- [x] AgentActivityFeed component:
+  - [x] Real-time updates
+  - [x] Grouped by agent
+  - [x] Timestamp display
+- [x] AgentSelector component:
+  - [x] For mentions in messages
+  - [x] Keyboard navigation
 
 ### 4.5 Communication Components
 

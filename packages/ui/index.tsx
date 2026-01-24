@@ -26,5 +26,11 @@ export * from './components/spinner';
 export * from './components/tabs';
 export * from './components/accordion';
 
+// Agent-specific components
+export * from './components/agent-avatar';
+export * from './components/agent-status-card';
+export * from './components/agent-activity-feed';
+export * from './components/agent-selector';
+
 // Utilities
 export * from './lib/utils';
