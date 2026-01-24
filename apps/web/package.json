@@ -14,6 +14,7 @@
     "@devteam/database": "workspace:^",
     "@devteam/shared": "workspace:*",
     "@devteam/ui": "workspace:*",
+    "@tanstack/react-query": "^5.90.20",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -24,7 +25,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.3.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@devteam/eslint-config": "workspace:*",
