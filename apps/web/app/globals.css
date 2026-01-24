@@ -2,7 +2,419 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
+/* ============================================
+   Design System - Global Styles
+   ============================================ */
+
+@layer base {
+  /* Root CSS Variables - Light Mode */
+  :root {
+    /* Core colors */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    /* Card & Popover */
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    /* Primary & Secondary */
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    /* Muted & Accent */
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    /* Semantic colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* Form elements */
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-border: 240 5.9% 90%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Container */
+    --container-padding: 1rem;
+  }
+
+  /* Dark Mode */
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 5%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --sidebar-background: 240 5.9% 6%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-accent: 240 3.7% 10.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+  }
+
+  /* Global resets and base styles */
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  h4 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  h5 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  h6 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  /* Links */
+  a {
+    text-decoration-skip-ink: auto;
+  }
+
+  /* Code */
+  code,
+  pre {
+    font-family: var(--font-mono), ui-monospace, monospace;
+  }
+
+  pre {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    background-color: hsl(var(--muted));
+    padding: 1rem;
+  }
+
+  code:not(pre code) {
+    background-color: hsl(var(--muted));
+    padding: 0.125rem 0.375rem;
+    border-radius: calc(var(--radius) - 4px);
+    font-size: 0.875em;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  th {
+    font-weight: 600;
+    background-color: hsl(var(--muted) / 0.5);
+  }
+
+  /* Form elements */
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
+  /* Disable animations for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============================================
+   Component Layer - Reusable Utilities
+   ============================================ */
+
+@layer components {
+  /* Container */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      max-width: 640px;
+    }
+  }
+  @media (min-width: 768px) {
+    .container {
+      max-width: 768px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1024px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1280px;
+    }
+  }
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1536px;
+    }
+  }
+
+  /* Glass effect */
+  .glass {
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-dark {
+    background: hsl(var(--background) / 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 25%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Prose (for markdown/rich text) */
+  .prose {
+    max-width: 65ch;
+  }
+
+  .prose p {
+    margin-bottom: 1em;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+  }
+
+  .prose li {
+    margin-bottom: 0.25em;
+  }
+
+  .prose blockquote {
+    border-left: 4px solid hsl(var(--border));
+    padding-left: 1em;
+    color: hsl(var(--muted-foreground));
+    font-style: italic;
+  }
+}
+
+/* ============================================
+   Utility Layer - Custom Utilities
+   ============================================ */
+
+@layer utilities {
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Aspect ratios */
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Safe area insets */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Line clamp */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Drag prevention */
+  .no-drag {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
 }

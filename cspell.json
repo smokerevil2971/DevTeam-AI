@@ -1,0 +1,29 @@
+{
+  "version": "0.2",
+  "words": [
+    "devteam",
+    "nextauth",
+    "fastify",
+    "nextjs",
+    "libc",
+    "addgroup",
+    "adduser",
+    "prerender",
+    "tailwindcss",
+    "prisma",
+    "psql",
+    "rgba",
+    "signup",
+    "wireframes",
+    "strikethrough",
+    "notif",
+    "consolas",
+    "segoe",
+    "fira",
+    "wcag",
+    "turborepo",
+    "Rakesh",
+    "Telang"
+  ],
+  "ignorePaths": ["node_modules", "dist", "build", ".next", "pnpm-lock.yaml"]
+}
