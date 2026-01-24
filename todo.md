@@ -435,35 +435,35 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 4.6 Code Editor Components
 
-- [ ] Set up Monaco Editor integration
-- [ ] Configure syntax highlighting themes
-- [ ] EditorTabs component:
-  - [ ] Tab list with scroll
-  - [ ] Close button
-  - [ ] Modified indicator
-  - [ ] Agent working indicator
-  - [ ] Drag to reorder
-- [ ] FileTree component:
-  - [ ] Expandable folders
-  - [ ] File icons by type
-  - [ ] Agent indicators
-  - [ ] Context menu
-  - [ ] Search/filter
-  - [ ] Create file/folder
-- [ ] EditorPane component:
-  - [ ] Monaco Editor wrapper
-  - [ ] Agent cursor display
-  - [ ] Highlighted regions (agent working)
-  - [ ] Diff view mode
-- [ ] Terminal component:
-  - [ ] xterm.js integration
-  - [ ] Multiple terminal tabs
-  - [ ] Resize support
-- [ ] CodeBlock component (for messages):
-  - [ ] Syntax highlighting
-  - [ ] Copy button
-  - [ ] Language badge
-  - [ ] Line numbers
+- [x] Set up Monaco Editor integration
+- [x] Configure syntax highlighting themes
+- [x] EditorTabs component:
+  - [x] Tab list with scroll
+  - [x] Close button
+  - [x] Modified indicator
+  - [x] Agent working indicator
+  - [x] Drag to reorder
+- [x] FileTree component:
+  - [x] Expandable folders
+  - [x] File icons by type
+  - [x] Agent indicators
+  - [x] Context menu
+  - [x] Search/filter
+  - [x] Create file/folder
+- [x] EditorPane component:
+  - [x] Monaco Editor wrapper
+  - [x] Agent cursor display
+  - [x] Highlighted regions (agent working)
+  - [x] Diff view mode
+- [x] Terminal component:
+  - [x] xterm.js integration
+  - [x] Multiple terminal tabs
+  - [x] Resize support
+- [x] CodeBlock component (for messages):
+  - [x] Syntax highlighting
+  - [x] Copy button
+  - [x] Language badge
+  - [x] Line numbers
 
 ### 4.7 Layout Components
 

@@ -39,5 +39,12 @@ export * from './components/message-thread';
 export * from './components/mention-dropdown';
 export * from './components/command-palette';
 
+// Code editor components
+export * from './components/editor-tabs';
+export * from './components/file-tree';
+export * from './components/editor-pane';
+export * from './components/terminal';
+export * from './components/code-block';
+
 // Utilities
 export * from './lib/utils';
