@@ -344,9 +344,9 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 - [x] Create CSS variables from design tokens
 - [x] Set up Tailwind custom colors
 - [x] Configure custom fonts
-- [ ] Create spacing scale
+- [x] Create spacing scale
 - [x] Set up animation utilities
-- [ ] Create global styles
+- [x] Create global styles
 
 ### 4.3 Core UI Components
 

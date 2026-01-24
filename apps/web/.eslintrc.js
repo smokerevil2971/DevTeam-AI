@@ -4,4 +4,13 @@ module.exports = {
   rules: {
     '@next/next/no-html-link-for-pages': 'off',
   },
+  overrides: [
+    {
+      files: ['*.js'],
+      parser: 'espree',
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    },
+  ],
 };
