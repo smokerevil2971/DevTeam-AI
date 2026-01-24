@@ -214,7 +214,15 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     );
 
     // Sort by last activity
-    threadPreviews.sort((a, b) => {
+    interface ThreadPreview {
+      threadId: string | null;
+      messageCount: number;
+      lastActivityAt: Date | null;
+      firstMessage: unknown;
+      lastMessage: unknown;
+    }
+
+    threadPreviews.sort((a: ThreadPreview, b: ThreadPreview) => {
       const dateA = a.lastActivityAt?.getTime() || 0;
       const dateB = b.lastActivityAt?.getTime() || 0;
       return dateB - dateA;
