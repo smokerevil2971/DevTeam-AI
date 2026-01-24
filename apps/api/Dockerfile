@@ -8,18 +8,28 @@ WORKDIR /app
 # Install pnpm
 RUN npm install -g pnpm
 
+# Copy package files for all workspaces
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json ./apps/api/
+COPY packages/database/package.json ./packages/database/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/ts-config/package.json ./packages/ts-config/
+COPY packages/eslint-config/package.json ./packages/eslint-config/
+
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
 COPY apps/api ./apps/api
 COPY packages ./packages
 
-RUN pnpm install --frozen-lockfile
+# Build
 RUN pnpm --filter api build
 RUN pnpm --filter api deploy --prod --ignore-scripts /prod/api
 
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Don't run as root
 RUN addgroup --system --gid 1001 nodejs
