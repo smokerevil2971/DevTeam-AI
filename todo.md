@@ -361,28 +361,28 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
   - [x] With icon support
   - [x] With action button
 - [x] Textarea component
-- [ ] Select/Dropdown component
+- [x] Select/Dropdown component
 - [x] Checkbox component
-- [ ] Radio group component
+- [x] Radio group component
 - [x] Switch/Toggle component
 - [x] Card component:
   - [x] Default, Interactive, Agent variants
 - [x] Badge component
 - [x] Avatar component
-- [ ] Tooltip component
-- [ ] Modal/Dialog component:
-  - [ ] With header, body, footer
-  - [ ] Close button
-  - [ ] Backdrop click to close
-  - [ ] Focus trap
-- [ ] Dropdown menu component
-- [ ] Context menu component
-- [ ] Toast/Notification component
-- [ ] Progress bar component
-- [ ] Skeleton loader component
-- [ ] Spinner component
-- [ ] Tabs component
-- [ ] Accordion component
+- [x] Tooltip component
+- [x] Modal/Dialog component:
+  - [x] With header, body, footer
+  - [x] Close button
+  - [x] Backdrop click to close
+  - [x] Focus trap
+- [x] Dropdown menu component
+- [x] Context menu component (using DropdownMenu)
+- [x] Toast/Notification component
+- [x] Progress bar component
+- [x] Skeleton loader component
+- [x] Spinner component
+- [x] Tabs component
+- [x] Accordion component
 
 ### 4.4 Agent-Specific Components
 

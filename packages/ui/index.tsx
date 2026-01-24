@@ -17,5 +17,14 @@ export * from './components/toast';
 export * from './components/dropdown-menu';
 export * from './components/radio-group';
 
+// Loading & Feedback components
+export * from './components/progress';
+export * from './components/skeleton';
+export * from './components/spinner';
+
+// Navigation components
+export * from './components/tabs';
+export * from './components/accordion';
+
 // Utilities
 export * from './lib/utils';
