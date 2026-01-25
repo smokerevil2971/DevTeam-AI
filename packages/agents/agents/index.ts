@@ -43,3 +43,12 @@ export {
   MigrationSpec,
   SeedDataSpec,
 } from './database-engineer';
+
+export {
+  SecurityEngineerAgent,
+  VulnerabilityReport,
+  SecurityFinding,
+  AuthConfigSpec,
+  SecurityHeaderSpec,
+  GeneratedSecurityCode,
+} from './security-engineer';
