@@ -9,3 +9,13 @@ export {
   ClarifyingQuestion,
   StatusUpdate,
 } from './project-manager';
+
+export {
+  FrontendDeveloperAgent,
+  ComponentSpec,
+  PropSpec,
+  PageSpec,
+  APIHookSpec,
+  StateStoreSpec,
+  GeneratedCode,
+} from './frontend-dev';
