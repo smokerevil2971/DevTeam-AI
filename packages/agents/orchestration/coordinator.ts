@@ -19,6 +19,7 @@ import { getRedisClient } from './redis';
 export class AgentCoordinator {
   private redis = getRedisClient();
   private context: ProjectContext | null = null;
+  private readonly LOCK_TTL = 300; // 5 minutes
 
   constructor() {}
 
@@ -29,6 +30,78 @@ export class AgentCoordinator {
     this.context = context;
     console.log(`[Coordinator] Initialized for project: ${context.name}`);
     // Hydrate state from Redis if needed
+  }
+
+  // ============ CONFLICT DETECTION ============
+
+  /**
+   * Try to acquire a lock for a file
+   * Returns true if lock acquired, false if already locked by another
+   */
+  async acquireFileLock(
+    projectId: string,
+    filePath: string,
+    agentId: string,
+  ): Promise<boolean> {
+    const key = `lock:${projectId}:${filePath}`;
+    // NX: Set only if not exists, EX: Expire in seconds
+    const result = await this.redis.set(
+      key,
+      agentId,
+      'EX',
+      this.LOCK_TTL,
+      'NX',
+    );
+
+    if (result === 'OK') {
+      console.log(`[Coordinator] Lock acquired for ${filePath} by ${agentId}`);
+      return true;
+    }
+
+    const holder = await this.redis.get(key);
+    if (holder === agentId) {
+      // Refresh lock
+      await this.redis.expire(key, this.LOCK_TTL);
+      return true;
+    }
+
+    console.warn(
+      `[Coordinator] Lock failed for ${filePath}. Held by ${holder}`,
+    );
+    return false;
+  }
+
+  /**
+   * Release a file lock
+   */
+  async releaseFileLock(
+    projectId: string,
+    filePath: string,
+    agentId: string,
+  ): Promise<boolean> {
+    const key = `lock:${projectId}:${filePath}`;
+    const holder = await this.redis.get(key);
+
+    if (holder === agentId) {
+      await this.redis.del(key);
+      console.log(`[Coordinator] Lock released for ${filePath} by ${agentId}`);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if a file operation would conflict
+   */
+  async checkConflict(
+    projectId: string,
+    filePath: string,
+    agentId: string,
+  ): Promise<boolean> {
+    const key = `lock:${projectId}:${filePath}`;
+    const holder = await this.redis.get(key);
+    return holder !== null && holder !== agentId;
   }
 
   /**

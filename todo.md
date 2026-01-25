@@ -798,10 +798,10 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
   - [x] Message routing
   - [x] Broadcast support
   - [x] Direct messaging
-- [ ] Implement conflict detection:
-  - [ ] File lock tracking
-  - [ ] Change conflict detection
-  - [ ] Resolution workflow
+- [x] Implement conflict detection:
+  - [x] File lock tracking
+  - [x] Change conflict detection
+  - [x] Resolution workflow
 
 ### 6.3 Context Management
 
