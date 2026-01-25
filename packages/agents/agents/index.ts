@@ -70,3 +70,11 @@ export {
   K8sSpec,
   GeneratedConfig,
 } from './devops-engineer';
+
+export {
+  AIMLSpecialistAgent,
+  RAGConfigSpec,
+  PromptTemplateSpec,
+  AIFeatureSpec,
+  GeneratedAICode,
+} from './ai-specialist';
