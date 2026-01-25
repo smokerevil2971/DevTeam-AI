@@ -536,19 +536,19 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 5.1 Agent Framework Core
 
-- [ ] Define Agent interface/type:
-  - [ ] Agent type enum
-  - [ ] Agent capabilities
-  - [ ] Agent prompts
-- [ ] Create base Agent class:
-  - [ ] Initialize with project context
-  - [ ] Message handling
-  - [ ] Task processing
-  - [ ] State management
-- [ ] Implement Agent Registry:
-  - [ ] Register all agent types
-  - [ ] Get agent by type
-  - [ ] List active agents
+- [x] Define Agent interface/type:
+  - [x] Agent type enum
+  - [x] Agent capabilities
+  - [x] Agent prompts
+- [x] Create base Agent class:
+  - [x] Initialize with project context
+  - [x] Message handling
+  - [x] Task processing
+  - [x] State management
+- [x] Implement Agent Registry:
+  - [x] Register all agent types
+  - [x] Get agent by type
+  - [x] List active agents
 
 ### 5.2 LLM Integration
 
