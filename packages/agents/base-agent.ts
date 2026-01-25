@@ -16,6 +16,7 @@ import {
   LLMResponse,
   AGENT_METADATA,
 } from './types';
+import { contextManager } from './core/context-manager';
 
 export interface AgentEventHandlers {
   onStatusChange?: (status: AgentStatus) => void;
@@ -175,12 +176,15 @@ export abstract class BaseAgent {
   /**
    * Process a task - to be implemented by subclasses
    */
+  /**
+   * Process a task - to be implemented by subclasses
+   */
   protected async processTask(task: AgentTask): Promise<void> {
     // Default implementation - subclasses should override
     this.updateProgress(10, 'Analyzing task requirements...');
 
     // Build task prompt
-    const taskPrompt = this.buildTaskPrompt(task);
+    const taskPrompt = await this.buildTaskPrompt(task);
 
     this.updateProgress(30, 'Generating solution...');
 
@@ -227,25 +231,16 @@ export abstract class BaseAgent {
   /**
    * Build task prompt
    */
-  protected buildTaskPrompt(task: AgentTask): string {
-    let prompt = `## Task: ${task.title}\n\n`;
-    prompt += `${task.description}\n\n`;
-    prompt += `Priority: ${task.priority}\n`;
-
-    if (this.context) {
-      prompt += `\n## Project Context\n`;
-      prompt += `Project: ${this.context.name}\n`;
-      prompt += `Tech Stack: ${this.context.techStack.join(', ')}\n`;
-
-      if (this.context.files.length > 0) {
-        prompt += `\nRelevant Files:\n`;
-        for (const file of this.context.files.slice(0, 10)) {
-          prompt += `- ${file.path}\n`;
-        }
-      }
+  protected async buildTaskPrompt(task: AgentTask): Promise<string> {
+    if (!this.context) {
+      return `## Task: ${task.title}\n\n${task.description}`;
     }
 
-    return prompt;
+    return contextManager.buildContext(task, this.context, {
+      maxTokens: this.config.maxTokens,
+      includeHistory: true,
+      includeFiles: true,
+    });
   }
 
   /**
