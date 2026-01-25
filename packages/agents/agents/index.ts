@@ -78,3 +78,5 @@ export {
   AIFeatureSpec,
   GeneratedAICode,
 } from './ai-specialist';
+
+export { AgentCoordinator, coordinator } from '../orchestration/coordinator';

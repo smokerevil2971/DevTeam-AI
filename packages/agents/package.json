@@ -5,11 +5,14 @@
   "main": "index.ts",
   "types": "index.ts",
   "dependencies": {
-    "langchain": "^0.1.0",
+    "@devteam/database": "workspace:*",
     "@devteam/shared": "workspace:*",
-    "@devteam/database": "workspace:*"
+    "bullmq": "^5.67.1",
+    "ioredis": "^5.9.2",
+    "langchain": "^0.1.0"
   },
   "devDependencies": {
-    "@devteam/ts-config": "workspace:*"
+    "@devteam/ts-config": "workspace:*",
+    "tsx": "^4.21.0"
   }
 }
