@@ -30,3 +30,16 @@ export {
   APIContract,
   GeneratedBackendCode,
 } from './backend-dev';
+
+export {
+  DatabaseEngineerAgent,
+  DataModelSpec,
+  FieldSpec,
+  PrismaFieldType,
+  RelationSpec,
+  IndexSpec,
+  SchemaAnalysis,
+  QueryAnalysis,
+  MigrationSpec,
+  SeedDataSpec,
+} from './database-engineer';

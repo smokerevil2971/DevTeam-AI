@@ -650,26 +650,26 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 5.6 Database Engineer Agent
 
-- [ ] Define Database Agent system prompt:
-  - [ ] Schema design expertise
-  - [ ] Query optimization
-  - [ ] Best practices
-- [ ] Implement schema design:
-  - [ ] Parse data requirements
-  - [ ] Generate Prisma schema
-  - [ ] Define relationships
-  - [ ] Add indexes
-- [ ] Implement migration generation:
-  - [ ] Schema diff detection
-  - [ ] Migration file creation
-  - [ ] Rollback scripts
-- [ ] Implement query optimization:
-  - [ ] Analyze query patterns
-  - [ ] Suggest indexes
-  - [ ] Optimize queries
-- [ ] Implement seed data generation:
-  - [ ] Create realistic test data
-  - [ ] Handle relationships
+- [x] Define Database Agent system prompt:
+  - [x] Schema design expertise
+  - [x] Query optimization
+  - [x] Best practices
+- [x] Implement schema design:
+  - [x] Parse data requirements
+  - [x] Generate Prisma schema
+  - [x] Define relationships
+  - [x] Add indexes
+- [x] Implement migration generation:
+  - [x] Schema diff detection
+  - [x] Migration file creation
+  - [x] Rollback scripts
+- [x] Implement query optimization:
+  - [x] Analyze query patterns
+  - [x] Suggest indexes
+  - [x] Optimize queries
+- [x] Implement seed data generation:
+  - [x] Create realistic test data
+  - [x] Handle relationships
 
 ### 5.7 Security Engineer Agent
 
