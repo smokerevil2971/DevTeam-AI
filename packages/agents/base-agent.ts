@@ -17,6 +17,7 @@ import {
   AGENT_METADATA,
 } from './types';
 import { contextManager } from './core/context-manager';
+import { coordinator } from './orchestration/coordinator';
 
 export interface AgentEventHandlers {
   onStatusChange?: (status: AgentStatus) => void;
@@ -324,6 +325,17 @@ Communication guidelines:
   protected updateProgress(progress: number, message: string): void {
     this.state.progress = progress;
     this.eventHandlers.onProgress?.(progress, message);
+
+    // Report to coordinator
+    if (this.state.currentTaskId) {
+      coordinator
+        .updateTaskProgress(this.state.currentTaskId, progress, message)
+        .catch((err) =>
+          console.error(
+            `[BaseAgent] Failed to update progress: ${err.message}`,
+          ),
+        );
+    }
   }
 
   /**

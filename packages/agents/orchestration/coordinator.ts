@@ -154,10 +154,57 @@ export class AgentCoordinator {
   /**
    * Get the current status of an agent
    */
+  /**
+   * Get the current status of an agent
+   */
   async getAgentStatus(agentType: AgentType): Promise<string> {
     // In a real system, we might query Redis for heartbeats
     // For now, we assume they are available if workers are running
     return 'active';
+  }
+
+  // ============ PROGRESS TRACKING ============
+
+  /**
+   * Update the progress of a task
+   * Stores progress in Redis and triggers events (e.g. WebSocket)
+   */
+  async updateTaskProgress(taskId: string, progress: number, message: string) {
+    // Store in Redis
+    const key = `progress:${taskId}`;
+    await this.redis.hset(key, {
+      progress: progress.toString(),
+      message,
+      updatedAt: new Date().toISOString(),
+    });
+
+    // Set expiry for progress key (e.g. 24 hours)
+    await this.redis.expire(key, 86400);
+
+    console.log(
+      `[Coordinator] Progress ${Math.round(progress)}% for ${taskId}: ${message}`,
+    );
+
+    // TODO: Broadcast via WebSocket
+  }
+
+  /**
+   * Log an activity to the project's activity stream
+   */
+  async logActivity(projectId: string, agentId: string, activity: string) {
+    const streamKey = `activity:${projectId}`;
+    const entry = JSON.stringify({
+      agentId,
+      activity,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Push to list
+    await this.redis.lpush(streamKey, entry);
+    // Trim to last 100 activities
+    await this.redis.ltrim(streamKey, 0, 99);
+
+    console.log(`[Coordinator] Activity: [${agentId}] ${activity}`);
   }
 
   /**
