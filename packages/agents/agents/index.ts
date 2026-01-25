@@ -61,3 +61,12 @@ export {
   CoverageReport,
   TestPlan,
 } from './qa-engineer';
+
+export {
+  DevOpsEngineerAgent,
+  DockerSpec,
+  CICDSpec,
+  ComposeSpec,
+  K8sSpec,
+  GeneratedConfig,
+} from './devops-engineer';
