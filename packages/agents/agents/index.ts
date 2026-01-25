@@ -19,3 +19,14 @@ export {
   StateStoreSpec,
   GeneratedCode,
 } from './frontend-dev';
+
+export {
+  BackendDeveloperAgent,
+  EndpointSpec,
+  TypeSpec,
+  ParamSpec,
+  ServiceSpec,
+  PrismaQuerySpec,
+  APIContract,
+  GeneratedBackendCode,
+} from './backend-dev';
