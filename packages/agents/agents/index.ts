@@ -52,3 +52,12 @@ export {
   SecurityHeaderSpec,
   GeneratedSecurityCode,
 } from './security-engineer';
+
+export {
+  QAEngineerAgent,
+  TestSuiteSpec,
+  TestCase,
+  GeneratedTest,
+  CoverageReport,
+  TestPlan,
+} from './qa-engineer';
