@@ -119,6 +119,52 @@ async function testProgress() {
     console.error('❌ Activity logging failed');
   }
 
+  // 7. Test Extended Metrics
+  console.log('6️⃣  Testing Extended Metrics (6.4 Extended)...');
+
+  // Metrics
+  await coordinator.trackMetric(mockContext.id, 'tokens_used', 150);
+  await coordinator.trackMetric(mockContext.id, 'tokens_used', 50);
+  const metrics = await redis.hgetall(`metrics:${mockContext.id}`);
+  console.log('   Metrics:', metrics);
+  if (metrics.tokens_used === '200') {
+    console.log('✅ Metrics tracked successfully');
+  } else {
+    console.error('❌ Metrics tracking failed');
+  }
+
+  // File Changes
+  await coordinator.logFileChange(
+    mockContext.id,
+    '/src/api.ts',
+    'create',
+    'backend_dev',
+  );
+  const fileChanges = await redis.lrange(
+    `file-changes:${mockContext.id}`,
+    0,
+    -1,
+  );
+  if (fileChanges.length > 0 && fileChanges[0].includes('/src/api.ts')) {
+    console.log('✅ File change logged successfully');
+  } else {
+    console.error('❌ File change logging failed');
+  }
+
+  // Decisions
+  await coordinator.recordDecision(
+    mockContext.id,
+    'Use Redis',
+    'For speed',
+    'architect',
+  );
+  const decisions = await redis.lrange(`decisions:${mockContext.id}`, 0, -1);
+  if (decisions.length > 0 && decisions[0].includes('Use Redis')) {
+    console.log('✅ Decision recorded successfully');
+  } else {
+    console.error('❌ Decision recording failed');
+  }
+
   // Cleanup
   await closeRedisConnections();
   await queueManager.closeAll(); // Just in case

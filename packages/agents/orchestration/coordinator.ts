@@ -208,6 +208,63 @@ export class AgentCoordinator {
   }
 
   /**
+   * Track a project metric
+   */
+  async trackMetric(projectId: string, category: string, value: number) {
+    const key = `metrics:${projectId}`;
+    // Increment the metric
+    await this.redis.hincrby(key, category, value);
+    console.log(`[Coordinator] Metric: ${category} +${value}`);
+  }
+
+  /**
+   * Log a file change event
+   */
+  async logFileChange(
+    projectId: string,
+    filePath: string,
+    changeType: 'create' | 'modify' | 'delete',
+    agentId: string,
+  ) {
+    const streamKey = `file-changes:${projectId}`;
+    const entry = JSON.stringify({
+      filePath,
+      changeType,
+      agentId,
+      timestamp: new Date().toISOString(),
+    });
+
+    await this.redis.lpush(streamKey, entry);
+    // Keep history of last 1000 changes
+    await this.redis.ltrim(streamKey, 0, 999);
+
+    console.log(
+      `[Coordinator] File Change: ${changeType} ${filePath} by ${agentId}`,
+    );
+  }
+
+  /**
+   * Record a key architectural decision
+   */
+  async recordDecision(
+    projectId: string,
+    decision: string,
+    rationale: string,
+    agentId: string,
+  ) {
+    const key = `decisions:${projectId}`;
+    const entry = JSON.stringify({
+      decision,
+      rationale,
+      agentId,
+      timestamp: new Date().toISOString(),
+    });
+
+    await this.redis.lpush(key, entry);
+    console.log(`[Coordinator] Decision Recorded: ${decision}`);
+  }
+
+  /**
    * Convert TaskPriority enum to BullMQ priority score
    * Lower number = Higher priority in BullMQ
    */
