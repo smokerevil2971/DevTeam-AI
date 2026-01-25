@@ -510,23 +510,23 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 4.9 Authentication Pages
 
-- [ ] Login page:
-  - [ ] Email/password form
-  - [ ] OAuth buttons
-  - [ ] "Forgot password" link
-  - [ ] "Sign up" link
-  - [ ] Form validation
-  - [ ] Error display
-- [ ] Signup page:
-  - [ ] Email/password form
-  - [ ] Name field
-  - [ ] Terms acceptance
-  - [ ] Form validation
-- [ ] Forgot password page
-- [ ] Reset password page
-- [ ] Email verification page
-- [ ] Auth callback page (for OAuth)
-- [ ] Protected route wrapper
+- [x] Login page:
+  - [x] Email/password form
+  - [x] OAuth buttons
+  - [x] "Forgot password" link
+  - [x] "Sign up" link
+  - [x] Form validation
+  - [x] Error display
+- [x] Signup page:
+  - [x] Email/password form
+  - [x] Name field
+  - [x] Terms acceptance
+  - [x] Form validation
+- [x] Forgot password page
+- [x] Reset password page
+- [x] Email verification page
+- [x] Auth callback page (for OAuth)
+- [x] Protected route wrapper
 
 ---
 
