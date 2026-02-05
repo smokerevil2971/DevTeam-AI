@@ -181,13 +181,28 @@ export abstract class BaseAgent {
    * Process a task - to be implemented by subclasses
    */
   protected async processTask(task: AgentTask): Promise<void> {
+    // Check for guidance before starting
+    await this.checkGuidance();
+
     // Default implementation - subclasses should override
     this.updateProgress(10, 'Analyzing task requirements...');
+
+    // Check if paused
+    await this.checkPauseState();
 
     // Build task prompt
     const taskPrompt = await this.buildTaskPrompt(task);
 
     this.updateProgress(30, 'Generating solution...');
+
+    // Check if paused before expensive LLM call
+    await this.checkPauseState();
+
+    // Check for task cancellation
+    if (await this.isTaskCancelled(task.id)) {
+      console.log(`[${this.type}] Task ${task.id} was cancelled`);
+      return;
+    }
 
     // Call LLM
     const response = await this.callLLM({
@@ -199,10 +214,69 @@ export abstract class BaseAgent {
 
     this.updateProgress(80, 'Processing response...');
 
+    // Check if paused before applying changes
+    await this.checkPauseState();
+
     // Parse and apply the response
     await this.applyTaskResult(task, response.content);
 
     this.updateProgress(100, 'Task completed');
+  }
+
+  /**
+   * Check if the agent is paused and wait if needed
+   */
+  protected async checkPauseState(): Promise<void> {
+    if (!this.context) return;
+
+    while (await coordinator.isAgentPaused(this.type, this.context.id)) {
+      console.log(`[${this.type}] Paused, waiting...`);
+      this.setStatus(AgentStatus.WAITING);
+      // Wait 2 seconds before checking again
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    // Resume status if we were waiting
+    if (this.state.status === AgentStatus.WAITING) {
+      this.setStatus(AgentStatus.WORKING);
+    }
+  }
+
+  /**
+   * Check for and process guidance messages
+   */
+  protected async checkGuidance(): Promise<void> {
+    const guidanceTasks = await coordinator.getGuidance(this.type);
+
+    if (guidanceTasks.length > 0) {
+      for (const guidance of guidanceTasks) {
+        console.log(
+          `[${this.type}] Processing user guidance: ${guidance.description}`,
+        );
+
+        // Update context or state based on guidance
+        // This is a hook for subclasses to override if needed
+        await this.handleGuidance(guidance);
+      }
+    }
+  }
+
+  /**
+   * Handle guidance message - can be overridden by subclasses
+   */
+  protected async handleGuidance(guidance: AgentTask): Promise<void> {
+    // Default implementation: log guidance
+    console.log(`[${this.type}] Received guidance: ${guidance.description}`);
+    // Subclasses can override to modify behavior based on guidance
+  }
+
+  /**
+   * Check if a task has been cancelled
+   */
+  protected async isTaskCancelled(taskId: string): Promise<boolean> {
+    const redis = coordinator['redis']; // Access via property
+    const status = await redis.get(`task:${taskId}:status`);
+    return status === 'CANCELLED';
   }
 
   /**

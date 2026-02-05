@@ -264,6 +264,135 @@ export class AgentCoordinator {
     console.log(`[Coordinator] Decision Recorded: ${decision}`);
   }
 
+  // ============ USER INTERVENTION ============
+
+  /**
+   * Pause a specific agent
+   */
+  async pauseAgent(agentId: string): Promise<void> {
+    const key = `agent:${agentId}:state`;
+    await this.redis.hset(key, 'status', 'PAUSED');
+    await this.redis.hset(key, 'pausedAt', new Date().toISOString());
+    console.log(`[Coordinator] Agent ${agentId} paused`);
+  }
+
+  /**
+   * Resume a specific agent
+   */
+  async resumeAgent(agentId: string): Promise<void> {
+    const key = `agent:${agentId}:state`;
+    await this.redis.hset(key, 'status', 'RUNNING');
+    await this.redis.hdel(key, 'pausedAt');
+    console.log(`[Coordinator] Agent ${agentId} resumed`);
+  }
+
+  /**
+   * Pause all agents in a project
+   */
+  async pauseAllAgents(projectId: string): Promise<void> {
+    const key = `project:${projectId}:paused`;
+    await this.redis.set(key, '1');
+    console.log(`[Coordinator] All agents in project ${projectId} paused`);
+  }
+
+  /**
+   * Resume all agents in a project
+   */
+  async resumeAllAgents(projectId: string): Promise<void> {
+    const key = `project:${projectId}:paused`;
+    await this.redis.del(key);
+    console.log(`[Coordinator] All agents in project ${projectId} resumed`);
+  }
+
+  /**
+   * Check if an agent is paused
+   */
+  async isAgentPaused(agentId: string, projectId: string): Promise<boolean> {
+    // Check project-wide pause
+    const projectPaused = await this.redis.get(`project:${projectId}:paused`);
+    if (projectPaused === '1') return true;
+
+    // Check individual agent pause
+    const agentStatus = await this.redis.hget(
+      `agent:${agentId}:state`,
+      'status',
+    );
+    return agentStatus === 'PAUSED';
+  }
+
+  /**
+   * Inject guidance message to a specific agent (high priority)
+   */
+  async injectGuidance(
+    agentId: string,
+    projectId: string,
+    message: string,
+  ): Promise<void> {
+    const guidanceTask: AgentTask = {
+      id: `guidance-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      projectId,
+      title: 'User Guidance',
+      description: message,
+      assignedAgent: agentId as AgentType,
+      status: TaskStatus.PENDING,
+      priority: TaskPriority.CRITICAL, // Highest priority
+      dependencies: [],
+      createdAt: new Date(),
+    };
+
+    // Store guidance in Redis for immediate retrieval
+    const key = `agent:${agentId}:guidance`;
+    await this.redis.lpush(key, JSON.stringify(guidanceTask));
+
+    console.log(`[Coordinator] Guidance injected to ${agentId}: ${message}`);
+  }
+
+  /**
+   * Get pending guidance messages for an agent
+   */
+  async getGuidance(agentId: string): Promise<AgentTask[]> {
+    const key = `agent:${agentId}:guidance`;
+    const messages = await this.redis.lrange(key, 0, -1);
+
+    if (messages.length > 0) {
+      // Clear the guidance after retrieving
+      await this.redis.del(key);
+      return messages.map((msg) => JSON.parse(msg));
+    }
+
+    return [];
+  }
+
+  /**
+   * Cancel a running task
+   */
+  async cancelTask(taskId: string, agentId: string): Promise<void> {
+    const key = `task:${taskId}:status`;
+    await this.redis.set(key, 'CANCELLED');
+
+    // Log the cancellation
+    await this.logActivity(
+      this.context?.id || '',
+      agentId,
+      `Task ${taskId} cancelled by user`,
+    );
+
+    console.log(`[Coordinator] Task ${taskId} cancelled`);
+  }
+
+  /**
+   * Reset agent state (for cleanup/recovery)
+   */
+  async resetAgentState(agentId: string): Promise<void> {
+    const stateKey = `agent:${agentId}:state`;
+    const guidanceKey = `agent:${agentId}:guidance`;
+
+    await this.redis.del(stateKey);
+    await this.redis.del(guidanceKey);
+
+    console.log(`[Coordinator] Agent ${agentId} state reset`);
+  }
+
   /**
    * Convert TaskPriority enum to BullMQ priority score
    * Lower number = Higher priority in BullMQ

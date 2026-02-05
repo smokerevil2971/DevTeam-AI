@@ -844,25 +844,25 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 6.5 User Intervention System
 
-- [ ] Implement pause functionality:
-  - [ ] Pause single agent
-  - [ ] Pause all agents
-  - [ ] Graceful task suspension
-- [ ] Implement resume functionality:
-  - [ ] Context restoration
-  - [ ] Task continuation
-- [ ] Implement guidance injection:
-  - [ ] User message to agent
-  - [ ] Context update
-  - [ ] Task modification
-- [ ] Implement rollback:
-  - [ ] File version restore
-  - [ ] Task state reset
-  - [ ] Activity cleanup
-- [ ] Implement override:
-  - [ ] User code replacement
-  - [ ] Skip agent suggestion
-  - [ ] Force completion
+- [x] Implement pause functionality:
+  - [x] Pause single agent
+  - [x] Pause all agents
+  - [x] Graceful task suspension
+- [x] Implement resume functionality:
+  - [x] Context restoration
+  - [x] Task continuation
+- [x] Implement guidance injection:
+  - [x] User message to agent
+  - [x] Context update
+  - [x] Task modification
+- [x] Implement rollback:
+  - [x] File version restore
+  - [x] Task state reset
+  - [x] Activity cleanup
+- [x] Implement override:
+  - [x] User code replacement
+  - [x] Skip agent suggestion
+  - [x] Force completion
 
 ---
 
