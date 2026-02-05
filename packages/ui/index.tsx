@@ -1,5 +1,19 @@
-// Core components
+// Cimport React from 'react';
+
+export const Button = () => {
+  return <button>Click me</button>;
+};
+
+// Export all components
 export * from './components/button';
+export * from './components/card';
+export * from './components/badge';
+export * from './components/progress';
+export * from './components/input';
+export * from './components/select';
+export * from './components/project-card';
+export * from './components/empty-dashboard';
+export * from './components/project-filters';
 export * from './components/input';
 export * from './components/card';
 export * from './components/label';

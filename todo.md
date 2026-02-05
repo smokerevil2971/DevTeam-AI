@@ -870,16 +870,16 @@ A multi-agent AI code editor where specialized AI agents collaborate to build so
 
 ### 7.1 Dashboard Page
 
-- [ ] Project list grid:
-  - [ ] Project cards with status
-  - [ ] Progress indicator
-  - [ ] Last activity
-  - [ ] Quick actions
-- [ ] Create project button
-- [ ] Search/filter projects
-- [ ] Sort options
-- [ ] Empty state for new users
-- [ ] Recent activity section
+- [x] Project list grid:
+  - [x] Project cards with status
+  - [x] Progress indicator
+  - [x] Last activity
+  - [x] Quick actions
+- [x] Create project button
+- [x] Search/filter projects
+- [x] Sort options
+- [x] Empty state for new users
+- [x] Recent activity section
 
 ### 7.2 Project Creation Flow
 
