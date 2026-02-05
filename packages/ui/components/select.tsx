@@ -1,152 +1,124 @@
-'use client';
-
 import * as React from 'react';
-import { ChevronDown, Check } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-interface SelectOption {
+interface SelectContextValue {
   value: string;
-  label: string;
-  disabled?: boolean;
+  onValueChange: (value: string) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-interface SelectProps {
-  options: SelectOption[];
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
+const SelectContext = React.createContext<SelectContextValue | undefined>(
+  undefined,
+);
+
+function useSelectContext() {
+  const context = React.useContext(SelectContext);
+  if (!context) {
+    throw new Error('Select components must be used within a Select');
+  }
+  return context;
 }
 
-export function Select({
-  options,
-  value,
-  onChange,
-  placeholder = 'Select an option',
-  disabled = false,
-  className,
-}: SelectProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [highlightedIndex, setHighlightedIndex] = React.useState(0);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+export interface SelectProps {
+  value: string;
+  onValueChange: (value: string) => void;
+  children: React.ReactNode;
+}
 
-  const selectedOption = options.find((o) => o.value === value);
-
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (disabled) return;
-
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        if (isOpen) {
-          const option = options[highlightedIndex];
-          if (option && !option.disabled) {
-            onChange?.(option.value);
-            setIsOpen(false);
-          }
-        } else {
-          setIsOpen(true);
-        }
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        if (isOpen) {
-          setHighlightedIndex((prev) =>
-            prev > 0 ? prev - 1 : options.length - 1,
-          );
-        }
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        if (isOpen) {
-          setHighlightedIndex((prev) =>
-            prev < options.length - 1 ? prev + 1 : 0,
-          );
-        } else {
-          setIsOpen(true);
-        }
-        break;
-      case 'Escape':
-        setIsOpen(false);
-        break;
-    }
-  };
+export function Select({ value, onValueChange, children }: SelectProps) {
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <div ref={containerRef} className={cn('relative', className)}>
-      <button
-        type="button"
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-haspopup="listbox"
-        disabled={disabled}
-        onClick={() => !disabled && setIsOpen(!isOpen)}
-        onKeyDown={handleKeyDown}
-        className={cn(
-          'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-          !selectedOption && 'text-muted-foreground',
-        )}
-      >
-        {selectedOption?.label || placeholder}
-        <ChevronDown
-          className={cn(
-            'h-4 w-4 opacity-50 transition-transform',
-            isOpen && 'rotate-180',
-          )}
-        />
-      </button>
+    <SelectContext.Provider value={{ value, onValueChange, open, setOpen }}>
+      <div className="relative">{children}</div>
+    </SelectContext.Provider>
+  );
+}
 
-      {isOpen && (
-        <ul
-          role="listbox"
-          className="animate-in fade-in-0 zoom-in-95 absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
-        >
-          {options.map((option, index) => (
-            <li
-              key={option.value}
-              role="option"
-              aria-selected={option.value === value}
-              aria-disabled={option.disabled}
-              onClick={() => {
-                if (!option.disabled) {
-                  onChange?.(option.value);
-                  setIsOpen(false);
-                }
-              }}
-              onMouseEnter={() => setHighlightedIndex(index)}
-              className={cn(
-                'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
-                index === highlightedIndex &&
-                  'bg-accent text-accent-foreground',
-                option.disabled && 'pointer-events-none opacity-50',
-                option.value === value && 'font-medium',
-              )}
-            >
-              {option.value === value && (
-                <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-                  <Check className="h-4 w-4" />
-                </span>
-              )}
-              {option.label}
-            </li>
-          ))}
-        </ul>
+export interface SelectTriggerProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export function SelectTrigger({ className, children }: SelectTriggerProps) {
+  const { open, setOpen } = useSelectContext();
+  const ref = React.useRef<HTMLButtonElement>(null);
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={() => setOpen(!open)}
+      className={cn(
+        'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        className,
       )}
+    >
+      {children}
+      <ChevronDown className="h-4 w-4 opacity-50" />
+    </button>
+  );
+}
+
+export function SelectValue() {
+  const { value } = useSelectContext();
+  return <span>{value || 'Select...'}</span>;
+}
+
+export interface SelectContentProps {
+  children: React.ReactNode;
+}
+
+export function SelectContent({ children }: SelectContentProps) {
+  const { open, setOpen } = useSelectContext();
+
+  if (!open) return null;
+
+  // Click outside handler
+  React.useEffect(() => {
+    const handleClick = () => setOpen(false);
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [setOpen]);
+
+  return (
+    <div
+      className="absolute top-full z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {children}
+    </div>
+  );
+}
+
+export interface SelectItemProps {
+  value: string;
+  children: React.ReactNode;
+}
+
+export function SelectItem({ value: itemValue, children }: SelectItemProps) {
+  const { value, onValueChange, setOpen } = useSelectContext();
+  const isSelected = value === itemValue;
+
+  return (
+    <div
+      onClick={() => {
+        onValueChange(itemValue);
+        setOpen(false);
+      }}
+      className={cn(
+        'relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground',
+        isSelected && 'bg-accent',
+      )}
+    >
+      {isSelected && (
+        <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+          <Check className="h-4 w-4" />
+        </span>
+      )}
+      {children}
     </div>
   );
 }
