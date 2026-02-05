@@ -59,5 +59,12 @@ export * from './components/project-card';
 export * from './components/empty-dashboard';
 export * from './components/project-filters';
 
+// Project creation components
+export * from './components/project-creation/step-1-describe';
+export * from './components/project-creation/step-2-conversation';
+export * from './components/project-creation/step-3-review';
+export * from './components/project-creation/step-4-confirm';
+export * from './components/project-creation/creation-wizard';
+
 // Utilities
 export * from './lib/utils';

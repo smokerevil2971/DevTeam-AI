@@ -57,7 +57,7 @@ export default function DashboardPage() {
   }, [projects, search, sortBy, statusFilter]);
 
   const handleCreateProject = () => {
-    router.push('/dashboard/new-project');
+    router.push('/dashboard/new');
   };
 
   const handleDeleteProject = (id: string) => {
@@ -115,28 +115,8 @@ export default function DashboardPage() {
           onStatusFilterChange={setStatusFilter}
         />
 
-        {/* Project Grid */}
-        {filteredProjects.length === 0 ? (
-          <div className="py-12 text-center">
-            <p className="text-muted-foreground">
-              No projects match your filters. Try adjusting your search or
-              filters.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                {...project}
-                onDelete={() => handleDeleteProject(project.id)}
-              />
-            ))}
-          </div>
-        )}
-
         {/* Stats */}
-        <div className="border-t pt-6">
+        <div className="border-y py-6">
           <div className="grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
             <div>
               <p className="text-2xl font-bold">{projects.length}</p>
@@ -166,6 +146,26 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Project Grid */}
+        {filteredProjects.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="text-muted-foreground">
+              No projects match your filters. Try adjusting your search or
+              filters.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                {...project}
+                onDelete={() => handleDeleteProject(project.id)}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
