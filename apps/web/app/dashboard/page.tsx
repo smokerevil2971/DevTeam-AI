@@ -6,7 +6,7 @@ import { Button } from '@devteam/ui/components/button';
 import { ProjectCard } from '@devteam/ui/components/project-card';
 import { EmptyDashboard } from '@devteam/ui/components/empty-dashboard';
 import { ProjectFilters } from '@devteam/ui/components/project-filters';
-import { mockProjects, type Project } from '../../../lib/mock-projects';
+import { mockProjects, type Project } from '../../lib/mock-projects';
 
 export default function DashboardPage() {
   const router = useRouter();

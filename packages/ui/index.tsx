@@ -1,19 +1,5 @@
-// Cimport React from 'react';
-
-export const Button = () => {
-  return <button>Click me</button>;
-};
-
-// Export all components
+// Core components
 export * from './components/button';
-export * from './components/card';
-export * from './components/badge';
-export * from './components/progress';
-export * from './components/input';
-export * from './components/select';
-export * from './components/project-card';
-export * from './components/empty-dashboard';
-export * from './components/project-filters';
 export * from './components/input';
 export * from './components/card';
 export * from './components/label';
@@ -67,6 +53,11 @@ export * from './components/sidebar';
 export * from './components/resizable-panel';
 export * from './components/page-header';
 export * from './components/empty-state';
+
+// Dashboard components
+export * from './components/project-card';
+export * from './components/empty-dashboard';
+export * from './components/project-filters';
 
 // Utilities
 export * from './lib/utils';
